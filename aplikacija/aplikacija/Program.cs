@@ -10,9 +10,9 @@ public static class Operation
 
 public class StudentIdGenerator
 {
-    public static int IdCreate(int value)
+    public static int idCreate(int Value)
     {
-        return value+1;
+        return Value+1;
     }
 }
 
@@ -38,22 +38,20 @@ public class Student : Person
 
 public class Validation
 {
-    public string ValidateString(string value)
+    public string ValidateString(string Value)
     {
-
-        if (string.IsNullOrEmpty(value))
+        if (string.IsNullOrEmpty(Value))
         {
             return "null";
         }
-        return value;
-
+        return Value;
     }
-    public float ValidateGPA(string gpa)
+    public float ValidateGPA(string StudentGpa)
     {
-        float value;
-        if (float.TryParse(gpa, out value))
+        float Value;
+        if (float.TryParse(StudentGpa, out Value))
         {
-            return (float)value;
+            return (float)Value;
         }
         else 
         {
@@ -63,34 +61,33 @@ public class Validation
 }
 
 
-
 public class Program
     {
         static void Main()
         {
-            List<Student> students = new List<Student>(2);
-            int temp=0;
-            int value=0;
+            List<Student> Students = new List<Student>(2);
+            int Temp=0;
+            int Value=0;
             do
             {
                 Validation v = new Validation();
                 Console.WriteLine("Operation:");
-                string op = Console.ReadLine();
-                op = op.ToUpper();
-                bool check_enlist = op.Equals(Operation.Enlist);
-                bool check_display = op.Equals(Operation.Display);
+                string typedOperation = Console.ReadLine();
+                typedOperation = typedOperation.ToUpper();
+                bool checkEnlist = typedOperation.Equals(Operation.Enlist);
+                bool checkDisplay = typedOperation.Equals(Operation.Display);
 
-                while (check_enlist == false && check_display == false) 
+                while (checkEnlist == false && checkDisplay == false) 
                 {
                     Console.WriteLine("Operation non-existing, please use appropriate operation");
                     Console.WriteLine("Operation:");
-                    op = Console.ReadLine();
-                    op = op.ToUpper();
-                    check_enlist = op.Equals(Operation.Enlist);
-                    check_display = op.Equals(Operation.Display);
+                    typedOperation= Console.ReadLine();
+                    typedOperation = typedOperation.ToUpper();
+                    checkEnlist = typedOperation.Equals(Operation.Enlist);
+                    checkDisplay = typedOperation.Equals(Operation.Display);
                 } 
 
-                if (string.Equals(op, Operation.Enlist))
+                if (string.Equals(typedOperation, Operation.Enlist))
                 {
                     Console.WriteLine("Student");
 
@@ -98,7 +95,7 @@ public class Program
                     string FirstName = Console.ReadLine();
                     while (v.ValidateString(FirstName) == "null")
                     {
-                        Console.WriteLine("You need to insert value.");
+                        Console.WriteLine("You need to insert Value.");
                         Console.WriteLine("First Name:");
                         FirstName = Console.ReadLine();
                     }
@@ -107,47 +104,40 @@ public class Program
                     string LastName = Console.ReadLine();
                     while (v.ValidateString(LastName) == "null")
                     {
-                        Console.WriteLine("You need to insert value.");
+                        Console.WriteLine("You need to insert Value.");
                         Console.WriteLine("Last name:");
                         LastName = Console.ReadLine();
                     }
 
                     Console.WriteLine("GPA: ");
-                    string gpa = Console.ReadLine();
-                    while (v.ValidateGPA(gpa) == 0)
+                    string StudentGpa = Console.ReadLine();
+                    while (v.ValidateGPA(StudentGpa) == 0)
                     {
-                        Console.WriteLine("You need to insert numerical value.");
+                        Console.WriteLine("You need to insert numerical Value.");
                         Console.WriteLine("GPA: ");
-                        gpa = Console.ReadLine();
+                        StudentGpa = Console.ReadLine();
                     }
 
-                int id = StudentIdGenerator.IdCreate(value);
-                value++;
-                Console.WriteLine(value);
-                Console.WriteLine(id);
-
-
-                    Student Student = new Student(id, FirstName, LastName, v.ValidateGPA(gpa));
-                    students.Add(Student);
+                int id = StudentIdGenerator.idCreate(Value);
+                Value++;
+                Student Student = new Student(id, FirstName, LastName, v.ValidateGPA(StudentGpa));
+                Students.Add(Student);
                 }
-                else if (string.Equals(op, Operation.Display))
+                else if (string.Equals(typedOperation, Operation.Display))
                 {
-                    int a = 1;
-                    students.Sort(delegate (Student x, Student y)
+                    int orderValue = 1;
+                    Students.Sort(delegate (Student x, Student y)
                     {
                         return x.PersonLastName.CompareTo(y.PersonLastName);
                     });
-                    foreach (Student s in students)
+                    foreach (Student Student in Students)
                     {
-
-                        Console.WriteLine("{0}. {1}, {2} - {3}   {4}", a++, s.PersonLastName, s.PersonFirstName, (float)s.StudentGPA,s.PersonId);
+                        Console.WriteLine("{0}. {1}, {2} - {3}  ", orderValue++, Student.PersonLastName, Student.PersonFirstName, (float)Student.StudentGPA);
                     }
-
-
                     Console.ReadKey();
-                    temp = 1;
+                    Temp = 1;
                 }
-            } while (temp == 0);
+            } while (Temp == 0);
         }
  }
 
