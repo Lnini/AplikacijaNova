@@ -16,6 +16,7 @@ public class StudentIdGenerator
     }
 }
 
+
 public abstract class Person
 {
     public int PersonId { get; set; }
