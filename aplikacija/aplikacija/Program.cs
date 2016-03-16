@@ -11,80 +11,66 @@ public static class Operation
 
 public class StudentIdGenerator
 {
-    public static string IdCreate()
+    public static int IdCreate(int value)
     {
-        string s = "abcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder builder = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 4; i++)
-        {
-            int index = random.Next(1, 36);
-            builder.Append(s[index]);
-        }
-        return builder.ToString();
+        return value+1;
     }
 }
 
 public abstract class Person
 {
-    public string Id { get; set; }
+    public int PersonId { get; set; }
+    public string PersonFirstName { get; set; }
+    public string PersonLastName { get; set; }
 }
 
 public class Student : Person
 {
-    public string _FirstName { get; set; }
-    public string _LastName { get; set; }
-    public float _GPA { get; set; }
+    public float StudentGPA { get; set; }
 
-    public Student(string _Id, string FirstName, string LastName, float GPA)
+    public Student(int Id, string FirstName, string LastName, float GPA)
     {
-        _FirstName = FirstName;
-        _LastName = LastName;
-        _GPA = GPA;
-        _Id = Id;
+        PersonFirstName = FirstName;
+        PersonLastName = LastName;
+        StudentGPA = GPA;
+        PersonId = Id;
     }
 }
 
 public class Validation
 {
-    public string Val_String(string val1)
+    public string ValidateString(string value)
     {
 
-        if (string.IsNullOrEmpty(val1))
+        if (string.IsNullOrEmpty(value))
         {
             return "null";
         }
-        return val1;
+        return value;
 
     }
-    public float Val_GPA_Type(string gp)
+    public float ValidateGPA(string gpa)
     {
-        float f_value;
-
-        if (float.TryParse(gp, out f_value))
+        float value;
+        if (float.TryParse(gpa, out value))
         {
-            return (float)f_value;
+            return (float)value;
         }
-        else
+        else 
         {
-            if (!float.TryParse(gp, out f_value))
-            { 
-                return 0;
-            }
-            else
-            {
-                return (float)f_value;
-            }
+            return 0;
         }
+     }
+}
 
-    }
 
-    public class Program
+public class Program
     {
         static void Main()
         {
             List<Student> students = new List<Student>(2);
             int temp=0;
+            int value=0;
             do
             {
                 Validation v = new Validation();
@@ -104,65 +90,65 @@ public class Validation
                     check_display = op.Equals(Operation.Display);
                 } 
 
-
-
                 if (string.Equals(op, Operation.Enlist))
                 {
                     Console.WriteLine("Student");
 
                     Console.WriteLine("First name: ");
-                    string fn = Console.ReadLine();
-                    while (v.Val_String(fn) == "null")
+                    string FirstName = Console.ReadLine();
+                    while (v.ValidateString(FirstName) == "null")
                     {
                         Console.WriteLine("You need to insert value.");
                         Console.WriteLine("First Name:");
-                        fn = Console.ReadLine();
+                        FirstName = Console.ReadLine();
                     }
 
                     Console.WriteLine("Last name: ");
-                    string ln = Console.ReadLine();
-                    while (v.Val_String(ln) == "null")
+                    string LastName = Console.ReadLine();
+                    while (v.ValidateString(LastName) == "null")
                     {
                         Console.WriteLine("You need to insert value.");
                         Console.WriteLine("Last name:");
-                        ln = Console.ReadLine();
+                        LastName = Console.ReadLine();
                     }
 
                     Console.WriteLine("GPA: ");
                     string gpa = Console.ReadLine();
-                    while (v.Val_GPA_Type(gpa) == 0)
+                    while (v.ValidateGPA(gpa) == 0)
                     {
                         Console.WriteLine("You need to insert numerical value.");
                         Console.WriteLine("GPA: ");
                         gpa = Console.ReadLine();
                     }
 
-                    string id = StudentIdGenerator.IdCreate();
+                int id = StudentIdGenerator.IdCreate(value);
+                value++;
+                Console.WriteLine(value);
+                Console.WriteLine(id);
 
-                    Student s = new Student(id, fn, ln, v.Val_GPA_Type(gpa));
 
-                    students.Add(s);
+                    Student Student = new Student(id, FirstName, LastName, v.ValidateGPA(gpa));
+                    students.Add(Student);
                 }
                 else if (string.Equals(op, Operation.Display))
                 {
                     int a = 1;
                     students.Sort(delegate (Student x, Student y)
                     {
-                        return x._LastName.CompareTo(y._LastName);
+                        return x.PersonLastName.CompareTo(y.PersonLastName);
                     });
                     foreach (Student s in students)
                     {
 
-                        Console.WriteLine("{0}. {1}, {2} - {3}", a++, s._LastName, s._FirstName, (float)s._GPA);
-
+                        Console.WriteLine("{0}. {1}, {2} - {3}   {4}", a++, s.PersonLastName, s.PersonFirstName, (float)s.StudentGPA,s.PersonId);
                     }
+
 
                     Console.ReadKey();
                     temp = 1;
                 }
             } while (temp == 0);
         }
-    }
-}
+ }
 
 
